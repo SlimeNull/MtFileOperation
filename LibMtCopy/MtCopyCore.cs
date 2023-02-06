@@ -1,4 +1,6 @@
-﻿namespace LibMtCopy
+﻿using LibFileOperation;
+
+namespace LibMtCopy
 {
     public static class MtCopyCore
     {
@@ -24,7 +26,7 @@
                     throw new ArgumentException("Destination cannot be a root directory");
 
                 string sourceDirParentPath = sourceDir.Parent.FullName;
-                FileInfo[] sourceFiles = sourceDir.GetFiles("*", SearchOption.AllDirectories);
+                IEnumerable<FileInfo> sourceFiles = CommonUtils.EnumDiretoryFiles(sourceDir);
 
                 foreach (var sourceFile in sourceFiles)
                 {
@@ -41,13 +43,14 @@
             }
         }
         
-        public static void Process(string source, string destination, bool overwrite, int threadCount, bool getTotalCount, MtCopyProgressCallback progressCallback)
+        public static void Process(IEnumerable<string> sources, string destination, bool overwrite, int threadCount, bool getTotalCount, MtCopyProgressCallback progressCallback)
         {
             if (threadCount < 0)
                 threadCount = int.MaxValue;
 
-            IEnumerable<KeyValuePair<FileInfo, FileInfo>> allFiles =
-                GetFilesForWriting(source, destination, overwrite);
+            IEnumerable<KeyValuePair<FileInfo, FileInfo>> allFiles = sources
+                .Select(source => GetFilesForWriting(source, destination, overwrite))
+                .Aggregate((files1, files2) => files1.Concat(files2));
 
             ParallelOptions options = new ParallelOptions()
             {
@@ -56,9 +59,9 @@
 
             int index = 0;
             int? totalCount = getTotalCount ? allFiles.Count() : null;
-            Parallel.ForEach(allFiles, (copy) =>
+            Parallel.ForEach(allFiles, options, (copy) =>
             {
-                FileInfo sourceFile = copy.Value;
+                FileInfo sourceFile = copy.Key;
                 FileInfo destFile = copy.Value;
                 if (destFile.DirectoryName == null)
                     throw new Exception("Unexpected exceptions");

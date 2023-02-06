@@ -39,7 +39,13 @@ internal class Program
                 try
                 {
                     DateTime startTime = DateTime.Now;
-                    MtDeleteCore.Process(o.Target, o.Recursive, o.ThreadCount, o.ShowTotalCount, (currentFile, index, totalCount) =>
+
+                    IEnumerable<FileSystemInfo> allTargets = CommonUtils.MatchFileAndDirectories(o.Target);
+
+                    if (!allTargets.Any())
+                        throw new Exception("No target that exists");
+
+                    MtDeleteCore.Process(allTargets.Select(info => info.FullName), o.Recursive, o.ThreadCount, o.ShowTotalCount, (currentFile, index, totalCount) =>
                     {
                         Console.WriteLine($" OK: {index}{(totalCount != null ? $"/{totalCount}" : string.Empty)} {currentFile.FullName}");
                     });

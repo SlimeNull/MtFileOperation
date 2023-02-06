@@ -44,7 +44,13 @@ internal class Program
                 try
                 {
                     DateTime startTime = DateTime.Now;
-                    MtCopyCore.Process(o.Source, o.Destination, o.Overwrite, o.ThreadCount, o.ShowTotalCount, (currentFile, index, totalCount) =>
+
+                    IEnumerable<FileSystemInfo> allSources = CommonUtils.MatchFileAndDirectories(o.Source);
+
+                    if (!allSources.Any())
+                        throw new Exception("No source that exists");
+
+                    MtCopyCore.Process(allSources.Select(info => info.FullName), o.Destination, o.Overwrite, o.ThreadCount, o.ShowTotalCount, (currentFile, index, totalCount) =>
                     {
                         Console.WriteLine($" OK: {index}{(totalCount != null ? $"/{totalCount}" : string.Empty)} {currentFile.FullName}");
                     });

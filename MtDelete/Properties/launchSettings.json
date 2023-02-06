@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "MtDelete": {
+      "commandName": "Project",
+      "commandLineArgs": "-r \"C:\\Users\\slime\\Desktop\\temp\\temp\\Image\""
+    }
+  }
+}
