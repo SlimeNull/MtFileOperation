@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -6,7 +6,6 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <LangVersion>latest</LangVersion>
-    <Authors>SlimeNull</Authors>
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,7 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\LibFileOperation\LibFileOperation.csproj" />
-    <ProjectReference Include="..\LibMtCopy\LibMtCopy.csproj" />
+    <ProjectReference Include="..\LibMtDelete\LibMtDelete.csproj" />
   </ItemGroup>
 
 </Project>
