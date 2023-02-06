@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "MtCopy": {
+      "commandName": "Project",
+      "commandLineArgs": "\"C:\\Users\\slime\\Documents\\Tencent Files\\2711521586\\Image\" \"C:\\Users\\slime\\Desktop\\temp\\temp\""
+    }
+  }
+}
